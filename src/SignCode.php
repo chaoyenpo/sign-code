@@ -2,6 +2,8 @@
 
 namespace Chaoyenpo\SignCode;
 
+use Illuminate\Support\Arr;
+
 class SignCode
 {
     private $secret;
@@ -10,10 +12,12 @@ class SignCode
     {
         if (isset($parameter['secret'])) {
             $this->secret = $parameter['secret'];
+        } else {
+            throw new Exception("Please provide secret.");
         }
     }
 
-    public function generate($parameter)
+    public function generate($parameter): string
     {
         $parameter = (array)$parameter;
 
@@ -28,7 +32,22 @@ class SignCode
         return $signCode;
     }
 
-    private function keySortToString($parameter)
+    public function check(array $parameter, $signCode = null)
+    {
+        $signCode = isset($signCode) ? $signCode : $parameter['signCode'];
+        if (empty($signCode)) {
+            throw new Exception("Can't find sign code.");
+        }
+
+        $parameter = Arr::except($parameter, 'signCode');
+
+        if ($this->generate($parameter) !== $signCode) {
+            return false;
+        }
+        return true;
+    }
+
+    private function keySortToString($parameter): string
     {
         ksort($parameter);
         $count = count($parameter);
@@ -42,7 +61,7 @@ class SignCode
         return $parameterString;
     }
 
-    private function stringReplace(string $string)
+    private function stringReplace(string $string): string
     {
         $string = str_replace('%2d', '-', $string);
         $string = str_replace('%5f', '_', $string);
