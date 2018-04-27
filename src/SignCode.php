@@ -54,6 +54,9 @@ class SignCode
         $i = 1;
         $parameterString = '';
         foreach ($parameter as $key => $value) {
+            if (gettype($value) === 'object') {
+                $value = json_encode($value);
+            }
             $parameterString .= $key.'='.$value;
             $parameterString .= $i < $count ? '&' : '';
             $i++;
