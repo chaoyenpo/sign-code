@@ -3,6 +3,7 @@
 namespace Chaoyenpo\SignCode;
 
 use Illuminate\Support\Arr;
+use \Exception;
 
 class SignCode
 {
