@@ -8,6 +8,7 @@ use \Exception;
 class SignCode
 {
     private $secret;
+    private $signCodePropertyName;
 
     public function __construct(array $parameter)
     {
@@ -16,6 +17,9 @@ class SignCode
         } else {
             throw new Exception("Please provide secret.");
         }
+
+        $this->signCodePropertyName = isset($parameter['sign_code_property_name'])
+        ? $parameter['sign_code_property_name'] : 'signCode';
     }
 
     public function generate($parameter): string
@@ -35,12 +39,12 @@ class SignCode
 
     public function check(array $parameter, $signCode = null)
     {
-        $signCode = isset($signCode) ? $signCode : $parameter['signCode'];
+        $signCode = isset($signCode) ? $signCode : $parameter[$this->signCodePropertyName];
         if (empty($signCode)) {
             throw new Exception("Can't find sign code.");
         }
 
-        $parameter = Arr::except($parameter, 'signCode');
+        $parameter = Arr::except($parameter, $this->signCodePropertyName);
 
         if ($this->generate($parameter) !== $signCode) {
             return false;

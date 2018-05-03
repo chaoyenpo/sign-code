@@ -5,7 +5,10 @@
 ```php
 use Chaoyenpo\SignCode\SignCode;
 
-$signCodeTool = new SignCode(['secret' => 'abc']);
+$signCodeTool = new SignCode([
+                        'secret' => 'abc',
+                        'sign_code_property_name' => 'signCode'
+                    ]);
 
 $parameter = [
     'merchantID' => 'ABC001',
