@@ -30,7 +30,6 @@ class SignCode
         $paramString = urlencode($paramString);
         $paramString = strtolower($paramString);
         $paramString = $this->stringReplace($paramString);
-
         $hmacBase64 = hash_hmac('sha1', $paramString, $this->secret, true);
         $signCode = base64_encode($hmacBase64);
 
@@ -60,7 +59,7 @@ class SignCode
         $parameterString = '';
         foreach ($parameter as $key => $value) {
             if (gettype($value) === 'object') {
-                $value = json_encode($value);
+                $value = json_encode($value, JSON_UNESCAPED_SLASHES);
             }
             $parameterString .= $key.'='.$value;
             $parameterString .= $i < $count ? '&' : '';
