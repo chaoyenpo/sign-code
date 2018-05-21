@@ -19,12 +19,13 @@ class SignCode
         }
 
         $this->signCodePropertyName = isset($parameter['sign_code_property_name'])
-        ? $parameter['sign_code_property_name'] : 'signCode';
+        ? $parameter['sign_code_property_name'] : 'sign_code';
     }
 
     public function generate($parameter): string
     {
         $parameter = (array)$parameter;
+        $parameter = Arr::except($parameter, $this->signCodePropertyName);
 
         $paramString = $this->keySortToString($parameter);
         $paramString = urlencode($paramString);
@@ -58,7 +59,7 @@ class SignCode
         $i = 1;
         $parameterString = '';
         foreach ($parameter as $key => $value) {
-            if (gettype($value) === 'object') {
+            if (gettype($value) === 'array') {
                 $value = json_encode($value, JSON_UNESCAPED_SLASHES);
             }
             $parameterString .= $key.'='.$value;
