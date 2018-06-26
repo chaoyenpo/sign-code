@@ -59,7 +59,7 @@ class SignCode
         $i = 1;
         $parameterString = '';
         foreach ($parameter as $key => $value) {
-            if (gettype($value) === 'array') {
+            if (gettype($value) === 'array' || gettype($value) === 'object') {
                 $value = json_encode($value, JSON_UNESCAPED_SLASHES);
             }
             $parameterString .= $key.'='.$value;
